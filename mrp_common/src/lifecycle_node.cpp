@@ -36,7 +36,7 @@ namespace mrp_common
   }
 
   void LifecycleNode::startHeartbeat()
-  { 
+  {
     return heartbeat_ptr_->startBeating();
   }
 
@@ -48,7 +48,7 @@ namespace mrp_common
   rclcpp_lifecycle::LifecycleNode::SharedPtr LifecycleNode::sharedFromThis()
   {
     std::cout << this->shared_from_this() << std::endl;
-    return  this->shared_from_this();
+    return this->shared_from_this();
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
@@ -76,11 +76,11 @@ namespace mrp_common
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  LifecycleNode::on_shutdown(const rclcpp_lifecycle::State & state)
+  LifecycleNode::on_shutdown(const rclcpp_lifecycle::State &state)
   {
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
-    
+
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   LifecycleNode::on_error(const rclcpp_lifecycle::State &)
   {
@@ -97,9 +97,9 @@ namespace mrp_common
         node_topic_interface_(node_topic_interface),
         node_base_interface_(node_base_interface),
         node_timer_interface_(node_timer_interface),
-        node_clock_interface_(node_clock_interface)
+        node_clock_interface_(node_clock_interface),
+        stop_beating_(false)
   {
-  
   }
 
   LifecycleNode::Heartbeat::~Heartbeat()
@@ -142,11 +142,13 @@ namespace mrp_common
     {
       heartbeat_timer_->reset();
     }
+    stop_beating_ = true;
   }
 
   void LifecycleNode::Heartbeat::stopBeating()
   {
-    // heartbeat_timer_->cancel();
+    heartbeat_timer_->cancel();
+    stop_beating_ = false;
   }
 
   void LifecycleNode::Heartbeat::heartbeatCallback()
@@ -155,6 +157,9 @@ namespace mrp_common
     rclcpp::Time now = node_clock_interface_->get_clock()->now();
     message.stamp = now;
     // RCLCPP_INFO(node_ptr_->get_logger(), "Publishing heartbeat, sent at [%f]", now.seconds());
-    heartbeat_publisher_->publish(message);
+    if (!stop_beating_)
+    {
+      heartbeat_publisher_->publish(message);
+    }
   }
 }

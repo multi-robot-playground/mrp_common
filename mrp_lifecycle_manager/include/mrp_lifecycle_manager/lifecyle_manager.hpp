@@ -15,7 +15,8 @@
 
 #include "mrp_lifecycle_manager/lifecycle_manager_client.hpp"
 
-#include "mrp_lifecycle_manager/visibility_control.h"
+#include "mrp_common/service_server.hpp"
+#include "mrp_common_msgs/srv/monitored_node_array.hpp"
 
 namespace mrp_lifecycle_manager
 {
@@ -153,6 +154,10 @@ namespace mrp_lifecycle_manager
     rclcpp::executors::MultiThreadedExecutor::SharedPtr executor_ptr_;
 
     std::map<mrp_common::LifecycleNode::Transition, mrp_common::LifecycleNode::State> transition_state_map_;
+    std::shared_ptr<mrp_common::ServiceServer<mrp_common_msgs::srv::MonitoredNodeArray>> change_nodes_state_server_;
+
+    void changeNodesStateCallback(std::shared_ptr<mrp_common_msgs::srv::MonitoredNodeArray::Request> &request,
+                                  std::shared_ptr<mrp_common_msgs::srv::MonitoredNodeArray::Response> &response);
   };
 } // namespace mrp_lifecycle_manager
 

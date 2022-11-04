@@ -24,6 +24,9 @@ find_package(mrp_common REQUIRED)
 find_package(mrp_common_msgs REQUIRED)
 find_package(lifecycle_msgs REQUIRED)
 
+find_package(ament_cmake_python REQUIRED)
+find_package(rclpy REQUIRED)
+
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -84,6 +87,12 @@ install(TARGETS ${lifecycle_manager}
   RUNTIME DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
+
+# Install Python executables
+install(PROGRAMS
+  scripts/simple_state_change_request.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

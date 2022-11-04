@@ -118,6 +118,7 @@ namespace mrp_common
       rclcpp::TimerBase::SharedPtr heartbeat_timer_{nullptr};
 
       std::string node_name_;
+      std::atomic<bool> stop_beating_;
 
       void heartbeatCallback();
     };

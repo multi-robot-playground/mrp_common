@@ -13,7 +13,7 @@ namespace mrp_common
   public:
     template <typename NodeType>
     explicit ServiceClient(
-        NodeType &node,
+        NodeType node,
         bool isolated_spin,
         const std::string &service_name,
         const rcl_service_options_t &options)

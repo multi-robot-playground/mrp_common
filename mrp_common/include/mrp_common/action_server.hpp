@@ -33,11 +33,11 @@ namespace mrp_common
 
     template <typename NodeSharedPtrType>
     explicit ActionServer(
-        NodeSharedPtrType &node,
+        NodeSharedPtrType node,
         const std::string &action_name,
         ExecuteCallback execute_callback,
         CompletionCallback completion_callback,
-        std::chrono::milliseconds server_timeout,
+        std::chrono::milliseconds execution_rate,
         bool spin_thread,
         const rcl_action_server_options_t &options)
         : node_base_interface_(node->get_node_base_interface()),
@@ -47,6 +47,7 @@ namespace mrp_common
           action_name_(action_name),
           execute_callback_(execute_callback),
           completion_callback_(completion_callback),
+          execution_rate_(execution_rate),
           spin_thread_(spin_thread),
           server_active_(false),
           stop_execution_(false),
@@ -446,7 +447,7 @@ namespace mrp_common
     bool server_active_;
     bool stop_execution_;
     bool preempt_requested_;
-    std::chrono::milliseconds server_timeout_;
+    std::chrono::milliseconds execution_rate_;
 
     bool isActive(const std::shared_ptr<rclcpp_action::ServerGoalHandle<ActionType>> handle) const
     {

@@ -15,15 +15,9 @@ def prepare_launch(context):
     robot_name = LaunchConfiguration('robot_name')
 
     monitored_nodes = [
-        "/robot0/controller_server",
-        "/robot1/controller_server",
-        "/robot2/controller_server",
-        "/robot3/controller_server",
+        "/robot0/motion_planner_server",
     ]
     heartbeat_interval = [
-        float(1000),
-        float(1000),
-        float(1000),
         float(1000)
     ]
 
